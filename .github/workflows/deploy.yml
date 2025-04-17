@@ -1,0 +1,29 @@
+name: Build & Push backend Image
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+jobs:
+  buildb:
+    runs-on: vm2
+    Environment: DVM2
+    env:
+      VM2_USR: ${{ secret.VM2_USER }}
+      VM2_PA: ${{ secret.VM2_PASS }}
+    steps:
+      -uses: actions/checkout@v4
+      -name: docker login
+      run: |
+      docker logout
+      echo "${{ env.VM2_PA }}" | docker login -u "${{ env.VM2_USR }}" --password-stdin
+      - name: build & push
+      working-directory: ./
+      run: |
+      docker rmi bimg || true
+      docker rmi koak/ak-lab2-backend:backend || true
+      docker build -t bimg .
+      docker tag bimg koak/ak-lab2-backend:backend
+      docker push koak/ak-lab2-backend:backend
