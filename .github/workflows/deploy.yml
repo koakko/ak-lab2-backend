@@ -27,3 +27,18 @@ jobs:
       docker build -t bimg .
       docker tag bimg koak/ak-lab2-backend:backend
       docker push koak/ak-lab2-backend:backend
+      -name: pull & deploy vm2
+      run: |
+      ssh -i v2@192.168.0.169
+      rsync -avs -e ssh v2@192.168.0.169:/home/ak/Documents/gact/adv_lab02/backend/docker-compose.yml ./
+      docker rmi redis:alpine || true
+      docker stop credis || true
+      docker rm credis || true
+      docker rmi koak/ak-lab2-backend:backend ||| true
+      docker stop cbackend || true
+      docker rm cbackend || true
+      docker rmi mysql:8.0 || true
+      docker stop cdatabase || true
+      docker rm cdatabase || true
+      docker compose up -d
+      
