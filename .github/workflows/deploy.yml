@@ -8,17 +8,17 @@ on:
       - main
 jobs:
   buildb:
-    runs-on: vm2
-    Environment: DVM2
+    runs-on: vm3
+    Environment: DVM
     env:
-      VM2_USR: ${{ secret.VM2_USER }}
-      VM2_PA: ${{ secret.VM2_PASS }}
+      VM_USR: ${{ secret.VM_USER }}
+      VM_PA: ${{ secret.VM_PASS }}
     steps:
       -uses: actions/checkout@v4
       -name: docker login
       run: |
       docker logout
-      echo "${{ env.VM2_PA }}" | docker login -u "${{ env.VM2_USR }}" --password-stdin
+      echo "${{ env.VM_PA }}" | docker login -u "${{ env.VM_USR }}" --password-stdin
       - name: build & push
       working-directory: ./
       run: |
