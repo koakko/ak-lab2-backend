@@ -11,8 +11,8 @@ jobs:
     runs-on: runb
     environment: DVM
     env:
-      VM_USR: ${{ secret.VM_USER }}
-      VM_PA: ${{ secret.VM_PASS }}
+      VM_USR: ${{ secrets.VM_USER }}
+      VM_PA: ${{ secrets.VM_PASS }}
     steps:
     - uses: actions/checkout@v4
     - name: docker login
