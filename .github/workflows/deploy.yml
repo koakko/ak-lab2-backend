@@ -8,7 +8,7 @@ on:
       - main
 jobs:
   buildb:
-    runs-on: vm3
+    runs-on: runb
     Environment: DVM
     env:
       VM_USR: ${{ secret.VM_USER }}
@@ -29,8 +29,8 @@ jobs:
       docker push koak/ak-lab2-backend:backend
       -name: pull & deploy vm2
       run: |
-      ssh -i v2@192.168.0.169
-      rsync -avs -e ssh v2@192.168.0.169:/home/ak/Documents/gact/adv_lab02/backend/docker-compose.yml ./
+      scp -i ./sshkeys/vmkey ./backend/docker-compose.yml v2@192.168.0.169:./
+      ssh -i /home/v3/sshkeys/vmkey v2@192.168.0.169
       docker rmi redis:alpine || true
       docker stop credis || true
       docker rm credis || true
