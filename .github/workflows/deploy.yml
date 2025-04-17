@@ -29,7 +29,7 @@ jobs:
          docker push koak/ak-lab2-backend:backend
     - name: pull & deploy vm2
       run: |
-         scp -i ./sshkeys/vmkey ./backend/docker-compose.yml v2@192.168.0.169:./
+         scp -i ./sshkeys/vmkey /home/v3/backend/docker-compose.yml v2@192.168.0.169:./
          ssh -i /home/v3/sshkeys/vmkey v2@192.168.0.169
          docker rmi redis:alpine || true
          docker stop credis || true
