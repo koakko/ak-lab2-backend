@@ -9,36 +9,36 @@ on:
 jobs:
   buildb:
     runs-on: runb
-    Environment: DVM
+    environment: DVM
     env:
       VM_USR: ${{ secret.VM_USER }}
       VM_PA: ${{ secret.VM_PASS }}
     steps:
-      -uses: actions/checkout@v4
-      -name: docker login
+    - uses: actions/checkout@v4
+    - name: docker login
       run: |
-      docker logout
-      echo "${{ env.VM_PA }}" | docker login -u "${{ env.VM_USR }}" --password-stdin
-      - name: build & push
+         docker logout
+         echo "${{ env.VM_PA }}" | docker login -u "${{ env.VM_USR }}" --password-stdin
+    - name: build & push
       working-directory: ./
       run: |
-           docker rmi bimg || true
-           docker rmi koak/ak-lab2-backend:backend || true
-           docker build -t bimg .
-           docker tag bimg koak/ak-lab2-backend:backend
-           docker push koak/ak-lab2-backend:backend
-      -name: pull & deploy vm2
+         docker rmi bimg || true
+         docker rmi koak/ak-lab2-backend:backend || true
+         docker build -t bimg .
+         docker tag bimg koak/ak-lab2-backend:backend
+         docker push koak/ak-lab2-backend:backend
+    - name: pull & deploy vm2
       run: |
-           scp -i ./sshkeys/vmkey ./backend/docker-compose.yml v2@192.168.0.169:./
-           ssh -i /home/v3/sshkeys/vmkey v2@192.168.0.169
-           docker rmi redis:alpine || true
-           docker stop credis || true
-           docker rm credis || true
-           docker rmi koak/ak-lab2-backend:backend ||| true
-           docker stop cbackend || true
-           docker rm cbackend || true
-           docker rmi mysql:8.0 || true
-           docker stop cdatabase || true
-           docker rm cdatabase || true
-           docker compose up -d
+         scp -i ./sshkeys/vmkey ./backend/docker-compose.yml v2@192.168.0.169:./
+         ssh -i /home/v3/sshkeys/vmkey v2@192.168.0.169
+         docker rmi redis:alpine || true
+         docker stop credis || true
+         docker rm credis || true
+         docker rmi koak/ak-lab2-backend:backend || true
+         docker stop cbackend || true
+         docker rm cbackend || true
+         docker rmi mysql:8.0 || true
+         docker stop cdatabase || true
+         docker rm cdatabase || true
+         docker compose up -d
       
